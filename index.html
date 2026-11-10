@@ -7,34 +7,44 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0b1017;
-            --card-bg: #141b24;
-            --card-hover: #1b2430;
-            --accent-color: #3ee0b2;
-            --text-main: #e7eef7;
-            --text-muted: #8b9bb0;
-            --border-color: #2a3544;
+            --bg-color: var(--tg-theme-bg-color, #0b1017);
+            --card-bg: var(--tg-theme-secondary-bg-color, #141b24);
+            --accent-color: var(--tg-theme-button-color, #3ee0b2);
+            --accent-text: var(--tg-theme-button-text-color, #04251b);
+            --text-main: var(--tg-theme-text-color, #e7eef7);
+            --text-muted: var(--tg-theme-hint-color, #8b9bb0);
+            --border-color: color-mix(in srgb, var(--text-muted) 30%, transparent);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-main); padding: 16px; max-width: 800px; margin: 0 auto; }
         header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
-        .brand { font-size: 18px; font-weight: 700; color: var(--text-main); }
+        .brand { font-size: 18px; font-weight: 700; }
         .brand span { color: var(--accent-color); }
         .controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
         .search-input { width: 100%; padding: 12px 16px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; outline: none; }
         .search-input:focus { border-color: var(--accent-color); }
-        .filter-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
-        .tag { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        .tag.active { background: var(--accent-color); color: #04251b; font-weight: 600; border-color: var(--accent-color); }
+        .filter-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .filter-tags::-webkit-scrollbar { display: none; }
+        .tag { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; white-space: nowrap; user-select: none; }
+        .tag.active { background: var(--accent-color); color: var(--accent-text); font-weight: 600; border-color: var(--accent-color); }
         .shops-list { display: flex; flex-direction: column; gap: 10px; }
-        .shop-row { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; text-decoration: none; color: var(--text-main); transition: border-color 0.2s; }
-        .shop-row:hover { border-color: var(--accent-color); background: var(--card-hover); }
+        .shop-row { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; text-decoration: none; color: var(--text-main); transition: border-color 0.2s, transform 0.1s; animation: fadeIn 0.3s ease both; }
+        .shop-row:hover { border-color: var(--accent-color); }
+        .shop-row:active { transform: scale(0.99); }
+        .shop-meta { min-width: 0; }
         .shop-meta h4 { font-size: 15px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .shop-meta p { font-size: 13px; color: var(--text-muted); }
-        .badge { font-size: 10px; padding: 2px 6px; background: rgba(62, 224, 178, 0.1); color: var(--accent-color); border-radius: 4px; border: 1px solid rgba(62, 224, 178, 0.3); }
+        .badge { font-size: 10px; padding: 2px 6px; background: color-mix(in srgb, var(--accent-color) 12%, transparent); color: var(--accent-color); border-radius: 4px; border: 1px solid color-mix(in srgb, var(--accent-color) 35%, transparent); }
+        .row-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
         .btn-open { font-size: 13px; font-weight: 600; color: var(--accent-color); white-space: nowrap; }
+        .fav { background: none; border: none; font-size: 20px; line-height: 1; color: var(--text-muted); cursor: pointer; padding: 4px; }
+        .fav.on { color: #f5c542; }
         .state { text-align: center; color: var(--text-muted); padding: 20px; }
         .state.error { color: #f87171; }
+        .skeleton { height: 72px; border-radius: 12px; background: linear-gradient(90deg, var(--card-bg) 25%, color-mix(in srgb, var(--text-muted) 18%, var(--card-bg)) 50%, var(--card-bg) 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite linear; }
+        @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .shop-row, .skeleton { animation: none; } }
     </style>
 </head>
 <body>
@@ -49,23 +59,60 @@
     </div>
 
     <div class="shops-list" id="shopsBox">
-        <p class="state">Загрузка каталога...</p>
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
 
     <script>
         // Публичный HTTPS-адрес бэкенда (временный ngrok-туннель; при перезапуске адрес меняется).
         const API_URL = "https://blinker-harmonize-factor.ngrok-free.dev";
+        const FAV_KEY = "storehub:favorites";
+        const FAV_TAB = "__favorites__";
 
         const searchInput = document.getElementById("searchInput");
         const categoryBox = document.getElementById("categoryTags");
         const itemsBox = document.getElementById("shopsBox");
 
+        let categories = [];
         let currentCategory = "";
         let searchTimer = null;
         let requestId = 0;
+        let favorites = new Set(readFavorites());
 
         const tg = window.Telegram && window.Telegram.WebApp;
-        if (tg) tg.expand();
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            applyTelegramTheme();
+            tg.onEvent("themeChanged", applyTelegramTheme);
+        }
+
+        function applyTelegramTheme() {
+            if (tg.backgroundColor) document.body.style.backgroundColor = tg.backgroundColor;
+            if (tg.setHeaderColor) tg.setHeaderColor("bg_color");
+            if (tg.setBackgroundColor) tg.setBackgroundColor("bg_color");
+        }
+
+        function haptic(kind = "light") {
+            const h = tg && tg.HapticFeedback;
+            if (!h) return;
+            if (kind === "select") h.selectionChanged();
+            else h.impactOccurred(kind);
+        }
+
+        function readFavorites() {
+            try {
+                const ids = JSON.parse(localStorage.getItem(FAV_KEY) || "[]");
+                return Array.isArray(ids) ? ids.filter(Number.isInteger) : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveFavorites() {
+            try {
+                localStorage.setItem(FAV_KEY, JSON.stringify([...favorites]));
+            } catch { /* хранилище недоступно */ }
+        }
 
         function escapeHtml(value) {
             return String(value ?? "").replace(/[&<>"']/g, ch => ({
@@ -93,46 +140,77 @@
             return res.json();
         }
 
-        function renderCategories(categories) {
-            const tags = [{ slug: "", name: "Все" }, ...categories];
-            categoryBox.innerHTML = tags.map(c => `
+        // Глубокая ссылка: ?startapp=category_<slug> или ?category=<slug> в адресе, либо start_param Mini App.
+        function deepLinkCategory() {
+            const params = new URLSearchParams(location.search);
+            const raw = (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param)
+                || params.get("tgWebAppStartParam")
+                || params.get("category")
+                || "";
+            return raw.startsWith("category_") ? raw.slice("category_".length) : raw;
+        }
+
+        function renderTabs() {
+            const tabs = [
+                { slug: "", name: "Все" },
+                { slug: FAV_TAB, name: `★ Избранное${favorites.size ? " " + favorites.size : ""}` },
+                ...categories,
+            ];
+            categoryBox.innerHTML = tabs.map(c => `
                 <div class="tag${c.slug === currentCategory ? " active" : ""}" data-slug="${escapeHtml(c.slug)}">${escapeHtml(c.name)}</div>
             `).join("");
         }
 
+        function showSkeletons() {
+            itemsBox.innerHTML = '<div class="skeleton"></div>'.repeat(4);
+        }
+
         async function loadCategories() {
             try {
-                renderCategories(await api("/api/public/categories"));
+                categories = await api("/api/public/categories");
             } catch (e) {
                 console.error("Не удалось загрузить категории", e);
-                renderCategories([]);
+                categories = [];
             }
+            const wanted = deepLinkCategory();
+            if (wanted && categories.some(c => c.slug === wanted)) currentCategory = wanted;
+            renderTabs();
+        }
+
+        function renderItems(items, animate = true) {
+            if (items.length === 0) {
+                itemsBox.innerHTML = `<p class="state">${currentCategory === FAV_TAB ? "В избранном пока пусто" : "Ничего не найдено"}</p>`;
+                return;
+            }
+            itemsBox.innerHTML = items.map((item, i) => `
+                <a href="${escapeHtml(safeUrl(item.url))}" class="shop-row" target="_blank" rel="noopener noreferrer" data-id="${item.id}" style="animation-delay:${animate ? Math.min(i, 8) * 30 : 0}ms">
+                    <div class="shop-meta">
+                        <h4>${item.kind === "bot" ? "🤖 " : "🔗 "}${escapeHtml(item.title)} <span class="badge">${escapeHtml(item.category.name)}</span></h4>
+                        <p>${escapeHtml(item.description)}</p>
+                    </div>
+                    <div class="row-actions">
+                        <button class="fav${favorites.has(item.id) ? " on" : ""}" data-fav="${item.id}" aria-label="В избранное">${favorites.has(item.id) ? "★" : "☆"}</button>
+                        <span class="btn-open">Открыть ↗</span>
+                    </div>
+                </a>
+            `).join("");
         }
 
         async function loadItems() {
             const current = ++requestId;
+            showSkeletons();
             try {
+                const onlyFavorites = currentCategory === FAV_TAB;
                 const data = await api("/api/public/items", {
                     q: searchInput.value.trim(),
-                    category: currentCategory,
+                    category: onlyFavorites ? "" : currentCategory,
+                    page_size: 100,
                 });
                 if (current !== requestId) return;
 
-                const items = data.items || [];
-                if (items.length === 0) {
-                    itemsBox.innerHTML = `<p class="state">Ничего не найдено</p>`;
-                    return;
-                }
-
-                itemsBox.innerHTML = items.map(item => `
-                    <a href="${escapeHtml(safeUrl(item.url))}" class="shop-row" target="_blank" rel="noopener noreferrer">
-                        <div class="shop-meta">
-                            <h4>${escapeHtml(item.title)} <span class="badge">${escapeHtml(item.category.name)}</span></h4>
-                            <p>${escapeHtml(item.description)}</p>
-                        </div>
-                        <span class="btn-open">Открыть ↗</span>
-                    </a>
-                `).join("");
+                let items = data.items || [];
+                if (onlyFavorites) items = items.filter(item => favorites.has(item.id));
+                renderItems(items);
             } catch (e) {
                 if (current !== requestId) return;
                 console.error("Не удалось загрузить записи", e);
@@ -143,18 +221,39 @@
         categoryBox.addEventListener("click", event => {
             const tag = event.target.closest(".tag");
             if (!tag) return;
+            haptic("select");
             currentCategory = tag.dataset.slug;
-            categoryBox.querySelectorAll(".tag").forEach(t => t.classList.toggle("active", t === tag));
+            renderTabs();
             loadItems();
+        });
+
+        itemsBox.addEventListener("click", event => {
+            const favBtn = event.target.closest(".fav");
+            if (favBtn) {
+                event.preventDefault();
+                const id = Number(favBtn.dataset.fav);
+                if (favorites.has(id)) favorites.delete(id); else favorites.add(id);
+                saveFavorites();
+                haptic("light");
+                renderTabs();
+                if (currentCategory === FAV_TAB) {
+                    loadItems();
+                } else {
+                    const on = favorites.has(id);
+                    favBtn.classList.toggle("on", on);
+                    favBtn.textContent = on ? "★" : "☆";
+                }
+                return;
+            }
+            if (event.target.closest(".shop-row")) haptic("light");
         });
 
         searchInput.addEventListener("input", () => {
             clearTimeout(searchTimer);
-            searchTimer = setTimeout(loadItems, 250);
+            searchTimer = setTimeout(() => { haptic("select"); loadItems(); }, 300);
         });
 
-        loadCategories();
-        loadItems();
+        loadCategories().then(loadItems);
     </script>
 </body>
 </html>
