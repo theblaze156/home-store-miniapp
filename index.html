@@ -140,6 +140,23 @@
             return res.json();
         }
 
+        // Учёт клика по записи: fire-and-forget, не мешает открытию ссылки.
+        function trackClick(id) {
+            if (!id) return;
+            const tgUserId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+            try {
+                fetch(`${API_URL}/api/public/items/${encodeURIComponent(id)}/click`, {
+                    method: "POST",
+                    keepalive: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "1",
+                    },
+                    body: JSON.stringify({ source: tg && tg.initData ? "miniapp" : "web", tg_user_id: tgUserId }),
+                }).catch(() => {});
+            } catch {}
+        }
+
         // Глубокая ссылка: ?startapp=category_<slug> или ?category=<slug> в адресе, либо start_param Mini App.
         function deepLinkCategory() {
             const params = new URLSearchParams(location.search);
@@ -245,7 +262,11 @@
                 }
                 return;
             }
-            if (event.target.closest(".shop-row")) haptic("light");
+            const row = event.target.closest(".shop-row");
+            if (row) {
+                haptic("light");
+                trackClick(row.dataset.id);
+            }
         });
 
         searchInput.addEventListener("input", () => {
