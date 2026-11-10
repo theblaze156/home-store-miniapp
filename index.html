@@ -53,8 +53,8 @@
     </div>
 
     <script>
-        // Публичный HTTPS-адрес бэкенда (на GitHub Pages http:// и localhost работать не будут).
-        const API_URL = "http://127.0.0.1:8000";
+        // Публичный HTTPS-адрес бэкенда (временный ngrok-туннель; при перезапуске адрес меняется).
+        const API_URL = "https://blinker-harmonize-factor.ngrok-free.dev";
 
         const searchInput = document.getElementById("searchInput");
         const categoryBox = document.getElementById("categoryTags");
@@ -86,7 +86,9 @@
             const query = new URLSearchParams(
                 Object.entries(params).filter(([, v]) => v !== "" && v != null)
             ).toString();
-            const res = await fetch(`${API_URL}${path}${query ? "?" + query : ""}`);
+            const res = await fetch(`${API_URL}${path}${query ? "?" + query : ""}`, {
+                headers: { "ngrok-skip-browser-warning": "1" },
+            });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             return res.json();
         }
