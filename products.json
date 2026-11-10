@@ -1,0 +1,102 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Kitchen"
+    },
+    {
+      "id": 2,
+      "name": "Bedroom"
+    },
+    {
+      "id": 3,
+      "name": "Lighting"
+    },
+    {
+      "id": 4,
+      "name": "Organization & storage"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "category_id": 1,
+      "category": "Kitchen",
+      "name": "[SAMPLE] Kitchen spice organizer",
+      "description": "Compact organizer for 12 jars. Metal + glass. Demo product.",
+      "price": 1290.0,
+      "stock": 25,
+      "photo": null
+    },
+    {
+      "id": 2,
+      "category_id": 1,
+      "category": "Kitchen",
+      "name": "[SAMPLE] Cutting board set (3 pcs)",
+      "description": "Bamboo, mixed sizes. Demo product for the catalogue.",
+      "price": 890.0,
+      "stock": 40,
+      "photo": null
+    },
+    {
+      "id": 3,
+      "category_id": 2,
+      "category": "Bedroom",
+      "name": "[SAMPLE] Queen-size bedding set",
+      "description": "Satin, 100% cotton: duvet cover + sheet + 2 pillowcases. Demo.",
+      "price": 3490.0,
+      "stock": 15,
+      "photo": null
+    },
+    {
+      "id": 4,
+      "category_id": 2,
+      "category": "Bedroom",
+      "name": "[SAMPLE] Orthopedic pillow",
+      "description": "Memory foam, removable cover. Demo product.",
+      "price": 2190.0,
+      "stock": 20,
+      "photo": null
+    },
+    {
+      "id": 5,
+      "category_id": 3,
+      "category": "Lighting",
+      "name": "[SAMPLE] LED desk lamp",
+      "description": "Warm/cool light, USB. Demo product.",
+      "price": 1590.0,
+      "stock": 30,
+      "photo": null
+    },
+    {
+      "id": 6,
+      "category_id": 3,
+      "category": "Lighting",
+      "name": "[SAMPLE] Indoor string lights 5 m",
+      "description": "Warm white light, batteries/USB. Demo.",
+      "price": 690.0,
+      "stock": 50,
+      "photo": null
+    },
+    {
+      "id": 7,
+      "category_id": 4,
+      "category": "Organization & storage",
+      "name": "[SAMPLE] Storage box with lid",
+      "description": "Fabric + frame, 40×30×25 cm. Demo product.",
+      "price": 790.0,
+      "stock": 35,
+      "photo": null
+    },
+    {
+      "id": 8,
+      "category_id": 4,
+      "category": "Organization & storage",
+      "name": "[SAMPLE] Wooden hangers (10 pcs)",
+      "description": "Beech wood, non-slip coating. Demo.",
+      "price": 990.0,
+      "stock": 60,
+      "photo": null
+    }
+  ]
+}

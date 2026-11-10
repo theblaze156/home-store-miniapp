@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#140f0c" />
+  <title>Home Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-kicker">Home goods</div>
+      <h1>Home Store</h1>
+    </div>
+    <button class="cart-btn" id="cartBtn" type="button" aria-label="Open cart">
+      🛒
+      <span class="badge" id="cartBadge">0</span>
+    </button>
+  </header>
+
+  <p class="demo-note">Preview mode — open this page from the Telegram bot to place an order.</p>
+
+  <div class="search-wrap">
+    <input id="search" type="search" placeholder="Search lamps, bedding, organizers…" autocomplete="off" />
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Categories"></nav>
+  <section class="grid" id="grid"></section>
+
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sheet" id="productSheet" role="dialog" aria-label="Product">
+    <div class="sheet-handle"></div>
+    <div id="productInner"></div>
+  </aside>
+
+  <aside class="sheet" id="cartSheet" role="dialog" aria-label="Cart">
+    <div class="sheet-handle"></div>
+    <h2 id="cartTitle">Cart</h2>
+    <div id="cartList"></div>
+    <form class="form" id="checkoutForm" hidden>
+      <label for="fName">Name</label>
+      <input id="fName" name="name" autocomplete="name" required />
+      <label for="fPhone">Phone</label>
+      <input id="fPhone" name="phone" type="tel" autocomplete="tel" required />
+      <label for="fAddress">Delivery address</label>
+      <textarea id="fAddress" name="address" autocomplete="street-address" required></textarea>
+      <label>Payment</label>
+      <div class="pay-row" id="payRow">
+        <button type="button" class="pay-opt" data-pay="cod">Pay on delivery</button>
+        <button type="button" class="pay-opt active" data-pay="card">Payment details</button>
+      </div>
+      <p class="form-error" id="formError"></p>
+      <button type="button" class="primary" id="placeFallback">Place order</button>
+    </form>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
